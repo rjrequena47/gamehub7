@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  gamehub-db:
+    image: postgres:15
+    container_name: gamehub-db
+    restart: always
+    environment:
+      POSTGRES_DB: gamehub
+      POSTGRES_USER: gamehub
+      POSTGRES_PASSWORD: gamehubPass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  gamehub-api:
+    build: .
+    container_name: gamehub-api
+    restart: on-failure
+    depends_on:
+      - gamehub-db
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://gamehub-db:5432/gamehub
+      SPRING_DATASOURCE_USERNAME: gamehub
+      SPRING_DATASOURCE_PASSWORD: gamehubPass
+
+volumes:
+  pgdata:
