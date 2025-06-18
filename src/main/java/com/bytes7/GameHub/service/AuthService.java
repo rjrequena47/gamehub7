@@ -1,5 +1,6 @@
 package com.bytes7.GameHub.service;
 
+import com.bytes7.GameHub.dto.request.LoginRequest;
 import com.bytes7.GameHub.dto.request.RegisterRequest;
 import com.bytes7.GameHub.dto.response.AuthResponse;
 import com.bytes7.GameHub.model.entity.User;
@@ -41,4 +42,18 @@ public class AuthService {
 
         return AuthResponse.builder().token(token).build();
     }
+
+    public AuthResponse login(LoginRequest request) {
+        User user = userRepository.findByEmail(request.getEmail())
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Contraseña incorrecta");
+        }
+
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
+
+        return AuthResponse.builder().token(token).build();
+    }
+
 }
