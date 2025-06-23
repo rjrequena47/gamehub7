@@ -7,21 +7,25 @@ import java.util.*;
 
 @Entity
 @Table(name = "tournaments")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Data
+@NoArgsConstructor 
+@AllArgsConstructor
 @Builder
 public class Tournament {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "tournament_id", unique = true)
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(name = "tournament_name", nullable = false)
     private String name;
 
+    @Column(name = "tournament_max_players")
     private int maxPlayers;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "tournament_status")
     private Status status;
 
     @ManyToMany
