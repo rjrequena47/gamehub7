@@ -35,7 +35,6 @@ public class UserService {
     public UserResponse getUserById(UUID id) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        System.out.println("usuario: "+user.getUsername());
 
         return UserResponse.builder()
                 .id(user.getId())
