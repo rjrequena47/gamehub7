@@ -1,8 +1,10 @@
 package com.bytes7.GameHub.service;
 
+import com.bytes7.GameHub.constant.ExceptionMessages;
 import com.bytes7.GameHub.dto.request.LoginRequest;
 import com.bytes7.GameHub.dto.request.RegisterRequest;
 import com.bytes7.GameHub.dto.response.AuthResponse;
+import com.bytes7.GameHub.exception.custom.EmailAlreadyExistsException;
 import com.bytes7.GameHub.model.entity.User;
 import com.bytes7.GameHub.model.enums.Role;
 import com.bytes7.GameHub.repository.UserRepository;
@@ -25,7 +27,7 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email ya registrado");
+            throw new EmailAlreadyExistsException(String.format(ExceptionMessages.EMAIL_ALREADY_EXISTS, request.getEmail()));
         }
 
         User user = User.builder()

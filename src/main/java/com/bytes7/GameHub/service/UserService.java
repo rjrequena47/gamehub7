@@ -1,6 +1,8 @@
 package com.bytes7.GameHub.service;
 
+import com.bytes7.GameHub.constant.ExceptionMessages;
 import com.bytes7.GameHub.dto.response.UserResponse;
+import com.bytes7.GameHub.exception.custom.ResourceNotFoundException;
 import com.bytes7.GameHub.model.entity.User;
 import com.bytes7.GameHub.repository.UserRepository;
 
@@ -21,7 +23,7 @@ public class UserService {
     public UserResponse getCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            .orElseThrow(() -> new ResourceNotFoundException(String.format(ExceptionMessages.USER_NOT_FOUND, username)));
 
         return UserResponse.builder()
                 .id(user.getId())
@@ -34,7 +36,7 @@ public class UserService {
 
     public UserResponse getUserById(UUID id) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            .orElseThrow(() -> new ResourceNotFoundException(String.format(ExceptionMessages.USER_NOT_FOUND, id)));
 
         return UserResponse.builder()
                 .id(user.getId())

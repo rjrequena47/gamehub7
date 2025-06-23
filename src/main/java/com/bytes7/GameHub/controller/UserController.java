@@ -23,7 +23,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/me")
+    @GetMapping("/me")
     @PreAuthorize("hasAnyRole('PLAYER', 'ADMIN')")
     @Operation(summary = "Obtener datos del usuario autenticado")
     public ResponseEntity<UserResponse> getCurrentUser() {
