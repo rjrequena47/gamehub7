@@ -3,12 +3,14 @@ package com.bytes7.GameHub.model.entity;
 import com.bytes7.GameHub.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class User {
 
@@ -31,4 +33,7 @@ public class User {
     private String rank;
 
     private int points;
+
+    // TODO: relacion
+    private List<Match> matches;
 }
