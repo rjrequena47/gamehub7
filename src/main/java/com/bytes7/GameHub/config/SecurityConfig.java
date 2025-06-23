@@ -30,11 +30,12 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/api/auth/**",
-                    "/v3/api-docs/**",
+                    "/api/users/{id}",          // Perfil público
+                    "/api/tournaments",         // Listar torneos
+                    "/api/tournaments/{id}",    // Detalle de torneo
+                    "/v3/api-docs/**",          // Swagger JSON
                     "/swagger-ui/**",
-                    "/swagger-ui.html",
-                    "/api/users/*",
-                    "/api/tournaments"
+                    "/swagger-ui.html"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
