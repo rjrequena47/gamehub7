@@ -2,6 +2,7 @@ package com.bytes7.GameHub.controller;
 
 import com.bytes7.GameHub.dto.request.CreateTournamentRequest;
 import com.bytes7.GameHub.dto.response.TournamentResponse;
+import com.bytes7.GameHub.dto.response.UserRankingDetails;
 import com.bytes7.GameHub.service.TournamentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -47,5 +48,25 @@ public class TournamentController {
     @Operation(summary = "Unirse a un torneo", description = "Permite a un jugador unirse a un torneo si hay cupo disponible")
     public ResponseEntity<TournamentResponse> joinTournament(@PathVariable UUID id) {
         return ResponseEntity.ok(tournamentService.joinTournament(id));
+    }
+
+    @GetMapping("/{id}/ranking")
+    @Operation(summary = "Resultados de un torneo", description = "Muestra los resultados del torneo con la id pedida")
+    public ResponseEntity<?> getRanking(@PathVariable UUID id, @RequestParam(required = false) Boolean fancyStyle) {
+        if (fancyStyle) {
+            return ResponseEntity.ok(tournamentService.getRanking(id).toString());
+        } else {
+            return ResponseEntity.ok(tournamentService.getRanking(id));
+        }
+    }
+
+    @GetMapping("/{id}/stats")
+    @Operation(summary = "Estadísticas de un torneo", description = "Muestra las partidas ganadas, perdidas y los puntos totales de cada jugador qeu participa en el torneo")
+    public ResponseEntity<?> getStats(@PathVariable UUID id, @RequestParam(required = false) Boolean fancyStyle) {
+        if (fancyStyle) {
+            return ResponseEntity.ok(tournamentService.getStats(id).toString());
+        } else {
+            return ResponseEntity.ok(tournamentService.getStats(id));
+        }
     }
 }
