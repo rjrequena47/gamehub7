@@ -7,21 +7,25 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "messages")
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Message {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "message_id", unique = true)
     private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
     private User sender;
 
+    @Column(name = "message_content")
     private String content;
 
+    @Column(name = "timestamp")
     private LocalDateTime timestamp;
 
     @ManyToOne
