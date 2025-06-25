@@ -2,6 +2,7 @@ package com.bytes7.GameHub.service;
 
 import com.bytes7.GameHub.dto.request.CreateTournamentRequest;
 import com.bytes7.GameHub.dto.response.TournamentResponse;
+import com.bytes7.GameHub.exception.ResourceNotFoundException;
 import com.bytes7.GameHub.model.entity.Tournament;
 import com.bytes7.GameHub.model.enums.Status;
 import com.bytes7.GameHub.repository.TournamentRepository;
@@ -57,7 +58,7 @@ public class TournamentService {
 
     public TournamentResponse getTournamentById(UUID id) {
         Tournament tournament = tournamentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Torneo no encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Torneo no encontrado con ID: " + id));
 
         return TournamentResponse.builder()
                 .id(tournament.getId())
