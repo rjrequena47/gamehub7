@@ -2,16 +2,6 @@ package com.bytes7.GameHub.service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-
-import com.bytes7.GameHub.dto.request.CreateTournamentRequest;
-import com.bytes7.GameHub.dto.response.TournamentResponse;
-import com.bytes7.GameHub.model.entity.Tournament;
-import com.bytes7.GameHub.model.enums.Result;
-import com.bytes7.GameHub.model.enums.Status;
-import com.bytes7.GameHub.repository.TournamentRepository;
-import com.bytes7.GameHub.model.entity.User;
-import com.bytes7.GameHub.repository.UserRepository;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,9 +11,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.bytes7.GameHub.dto.request.CreateTournamentRequest;
+import com.bytes7.GameHub.dto.response.TournamentResponse;
 import com.bytes7.GameHub.dto.response.UserRankingDetails;
 import com.bytes7.GameHub.dto.response.UserStats;
 import com.bytes7.GameHub.model.entity.Match;
+import com.bytes7.GameHub.model.entity.Tournament;
+import com.bytes7.GameHub.model.entity.User;
+import com.bytes7.GameHub.model.enums.Result;
+import com.bytes7.GameHub.model.enums.Status;
+import com.bytes7.GameHub.repository.TournamentRepository;
+import com.bytes7.GameHub.repository.UserRepository;
 
 @Service
 public class TournamentService {
@@ -153,7 +151,7 @@ public class TournamentService {
         List<UserStats> userStatsList = new ArrayList<>();
         // Obtenemos los matches de cada usuario
         for (User user : users) {
-            List<Match> userMatches = user.getMatches();
+            List<Match> userMatches = user.getAllMatches();
             
             Integer wins = 0;
             Integer loses = 0;

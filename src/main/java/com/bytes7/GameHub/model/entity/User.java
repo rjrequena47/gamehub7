@@ -7,7 +7,6 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -41,13 +40,24 @@ public class User {
     @Column(name = "points")
     private int points;
 
-    // TODO: relacion
-    private List<Match> matches;
+    @OneToMany(mappedBy = "player1")
+    private List<Match> matchesAsPlayer1 = new ArrayList<>();
+
+    @OneToMany(mappedBy = "player2")
+    private List<Match> matchesAsPlayer2 = new ArrayList<>();
+
 
     @ManyToMany(mappedBy = "players")
     private List<Tournament> tournaments = new ArrayList<>();
 
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
     private List<Message> sentMessages = new ArrayList<>();
+
+    public List<Match> getAllMatches() {
+        List<Match> all = new ArrayList<>();
+        all.addAll(matchesAsPlayer1);
+        all.addAll(matchesAsPlayer2);
+        return all;
+    }
 
 }
