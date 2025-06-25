@@ -19,11 +19,13 @@ import com.bytes7.GameHub.dto.request.UpdateResultRequest;
 import com.bytes7.GameHub.model.entity.Match;
 import com.bytes7.GameHub.service.MatchService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/matches")
 @RequiredArgsConstructor
+@Tag(name = "Partidos", description = "Gestión de emparejamientos y resultados")
 public class MatchController {
 
     private final MatchService matchService;
