@@ -1,9 +1,20 @@
 package com.bytes7.GameHub.model.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "messages")
@@ -29,10 +40,10 @@ public class Message {
     private LocalDateTime timestamp;
 
     @ManyToOne
-    @JoinColumn(name = "match_id", nullable = true)
+    @JoinColumn(name = "match_id")
     private Match match;
 
     @ManyToOne
-    @JoinColumn(name = "tournament_id", nullable = true)
+    @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 }
