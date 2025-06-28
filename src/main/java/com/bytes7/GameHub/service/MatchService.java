@@ -11,7 +11,10 @@ import com.bytes7.GameHub.repository.TournamentRepository;
 import com.bytes7.GameHub.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,16 +46,21 @@ public class MatchService {
         return matchRepository.save(match);
     }
 
+    @Transactional
     public Match updateMatchResult(UUID matchId, Result result) {
-
         Match match = matchRepository.findById(matchId)
                 .orElseThrow(() -> new ResourceNotFoundException("Partido no encontrado"));
+
+        if (match.getStatus() == MatchStatus.FINISHED) {
+            throw new IllegalStateException("El partido ya finalizó");
+        }
 
         match.setResult(result);
         match.setStatus(MatchStatus.FINISHED);
 
         return matchRepository.save(match);
     }
+
 
     public List<Match> getMatchesByTournament(UUID tournamentId) {
         return matchRepository.findByTournamentId(tournamentId);
@@ -62,4 +70,47 @@ public class MatchService {
         return matchRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Partido no encontrado con ID: " + id));
     }
+
+    @Transactional
+    public List<Match> generateMatchups(UUID tournamentId) {
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+            .orElseThrow(() -> new ResourceNotFoundException("Torneo no encontrado"));
+
+        List<User> players = tournament.getPlayers();
+
+        if (players.size() < 2) {
+            throw new IllegalStateException("Se necesitan al menos 2 jugadores para emparejar");
+        }
+
+        Collections.shuffle(players); // Aleatorizar orden
+
+        // Si es impar, asignamos un Bye aleatorio
+        if (players.size() % 2 != 0) {
+            User byePlayer = players.remove(0); // Saca al primer jugador tras mezclar
+
+            Match byeMatch = Match.builder()
+                    .tournament(tournament)
+                    .player1(byePlayer)
+                    .player2(null)
+                    .status(MatchStatus.FINISHED)
+                    .result(Result.PLAYER1_WON)
+                    .build();
+
+            matchRepository.save(byeMatch);
+        }
+
+        List<Match> matches = new ArrayList<>();
+        for (int i = 0; i < players.size() - 1; i += 2) {
+            Match match = Match.builder()
+                .tournament(tournament)
+                .player1(players.get(i))
+                .player2(players.get(i + 1))
+                .status(MatchStatus.PENDING)
+                .build();
+            matches.add(matchRepository.save(match));
+        }
+
+        return matches;
+    }
+
 }

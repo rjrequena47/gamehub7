@@ -33,6 +33,7 @@ public class SecurityConfig {
                     "/api/users/{id}",          // Perfil público
                     "/api/tournaments",         // Listar torneos
                     "/api/tournaments/{id}",    // Detalle de torneo
+                    "/api/matches/{id}",        // Consulta de Match por id
                     "/v3/api-docs/**",          // Swagger JSON
                     "/swagger-ui/**",
                     "/swagger-ui.html"
