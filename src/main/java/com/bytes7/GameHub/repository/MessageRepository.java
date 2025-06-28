@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface MessageRepository extends JpaRepository<Message, UUID> {
     List<Message> findByTournamentIdOrderByTimestampAsc(UUID tournamentId);
+    List<Message> findByMatch_IdOrderByTimestampAsc(UUID matchId);
 }

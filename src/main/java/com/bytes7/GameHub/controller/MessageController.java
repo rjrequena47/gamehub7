@@ -12,11 +12,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/tournaments/{tournamentId}/messages")
+@Tag(name = "Mensajes", description = "Gestión de Mensajes de GameHub7")
 @RequiredArgsConstructor
 public class MessageController {
 

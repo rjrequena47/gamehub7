@@ -1,5 +1,6 @@
 package com.bytes7.GameHub.service;
 
+import com.bytes7.GameHub.dto.response.TournamentRankingDTO;
 import com.bytes7.GameHub.exception.ResourceNotFoundException;
 import com.bytes7.GameHub.model.entity.Match;
 import com.bytes7.GameHub.model.entity.Tournament;
@@ -15,7 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -111,6 +115,142 @@ public class MatchService {
         }
 
         return matches;
+    }
+
+    @Transactional(readOnly = true)
+    public List<TournamentRankingDTO> getTournamentRanking(UUID tournamentId) {
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Torneo no encontrado"));
+
+        Map<UUID, PlayerStats> stats = new HashMap<>();
+
+        List<Match> matches = matchRepository.findByTournamentId(tournamentId);
+
+        for (Match match : matches) {
+            if (match.getPlayer1() != null) {
+                stats.putIfAbsent(match.getPlayer1().getId(), new PlayerStats(match.getPlayer1().getUsername()));
+            }
+            if (match.getPlayer2() != null) {
+                stats.putIfAbsent(match.getPlayer2().getId(), new PlayerStats(match.getPlayer2().getUsername()));
+            }
+
+            if (match.getStatus() == MatchStatus.FINISHED) {
+                if (match.getPlayer1() != null) stats.get(match.getPlayer1().getId()).incrementMatchesPlayed();
+                if (match.getPlayer2() != null) stats.get(match.getPlayer2().getId()).incrementMatchesPlayed();
+
+                if (match.getResult() == Result.PLAYER1_WON && match.getPlayer1() != null) {
+                    stats.get(match.getPlayer1().getId()).incrementVictories();
+                } else if (match.getResult() == Result.PLAYER2_WON && match.getPlayer2() != null) {
+                    stats.get(match.getPlayer2().getId()).incrementVictories();
+                }
+            }
+        }
+
+        return stats.entrySet().stream()
+            .map(e -> TournamentRankingDTO.builder()
+                    .playerId(e.getKey().toString())
+                    .username(e.getValue().getUsername())
+                    .victories(e.getValue().getVictories())
+                    .matchesPlayed(e.getValue().getMatchesPlayed())
+                    .build())
+            .sorted(Comparator.comparingInt(TournamentRankingDTO::getVictories).reversed())
+            .toList();
+    }
+
+    public List<TournamentRankingDTO> calculateTournamentRanking(UUID tournamentId) {
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Torneo no encontrado"));
+
+        Map<UUID, PlayerStats> stats = new HashMap<>();
+
+        for (Match match : matchRepository.findByTournamentId(tournament.getId())) {
+
+            if (match.getStatus() != MatchStatus.FINISHED) continue;
+
+            UUID player1Id = match.getPlayer1().getId();
+            UUID player2Id = match.getPlayer2() != null ? match.getPlayer2().getId() : null;
+
+            stats.putIfAbsent(player1Id, new PlayerStats(match.getPlayer1().getUsername()));
+            stats.get(player1Id).incrementMatchesPlayed();
+
+            if (player2Id != null) {
+                stats.putIfAbsent(player2Id, new PlayerStats(match.getPlayer2().getUsername()));
+                stats.get(player2Id).incrementMatchesPlayed();
+            }
+
+            if (match.getResult() == Result.PLAYER1_WON) {
+                stats.get(player1Id).incrementVictories();
+                if (player2Id != null) stats.get(player2Id).incrementDefeats();
+
+            } else if (match.getResult() == Result.PLAYER2_WON && player2Id != null) {
+                stats.get(player2Id).incrementVictories();
+                stats.get(player1Id).incrementDefeats();
+            }
+        }
+
+        return stats.entrySet().stream()
+                .map(e -> TournamentRankingDTO.builder()
+                        .playerId(e.getKey().toString())
+                        .username(e.getValue().getUsername())
+                        .victories(e.getValue().getVictories())
+                        .defeats(e.getValue().getDefeats())
+                        .matchesPlayed(e.getValue().getMatchesPlayed())
+                        .points(e.getValue().getPoints())
+                        .build())
+                .sorted(Comparator.comparingInt(TournamentRankingDTO::getPoints).reversed())
+                .toList();
+    }
+
+    // Clase auxiliar interna
+    private static class PlayerStats {
+
+        private final String username;
+        private int victories;
+        private int defeats;
+        private int matchesPlayed;
+        private int points;
+
+        public PlayerStats(String username) {
+            this.username = username;
+            this.victories = 0;
+            this.defeats = 0;
+            this.matchesPlayed = 0;
+            this.points = 0;
+        }
+
+        public void incrementVictories() {
+            this.victories++;
+            this.points += 3; // Sistema clásico: 3 puntos por victoria
+        }
+
+        public void incrementDefeats() {
+            this.defeats++;
+            // 0 puntos por derrota
+        }
+
+        public void incrementMatchesPlayed() {
+            this.matchesPlayed++;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public int getVictories() {
+            return victories;
+        }
+
+        public int getDefeats() {
+            return defeats;
+        }
+
+        public int getMatchesPlayed() {
+            return matchesPlayed;
+        }
+
+        public int getPoints() {
+            return points;
+        }
     }
 
 }

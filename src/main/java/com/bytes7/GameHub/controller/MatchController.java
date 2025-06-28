@@ -16,10 +16,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import lombok.RequiredArgsConstructor;
 
+import com.bytes7.GameHub.dto.request.SendMessageRequest;
 import com.bytes7.GameHub.dto.request.UpdateResultRequest;
 import com.bytes7.GameHub.dto.response.MatchResponse;
+import com.bytes7.GameHub.dto.response.MessageResponse;
 import com.bytes7.GameHub.model.entity.Match;
+import com.bytes7.GameHub.model.entity.Message;
 import com.bytes7.GameHub.service.MatchService;
+import com.bytes7.GameHub.service.MessageService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,6 +41,7 @@ import jakarta.validation.Valid;
 public class MatchController {
 
     private final MatchService matchService;
+    private final MessageService messageService;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{tournamentId}/pair")
@@ -79,15 +84,32 @@ public class MatchController {
         return ResponseEntity.ok(matchService.getMatchesByTournament(tournamentId));
     }
 
+    @Operation(summary = "Generar emparejamientos automáticos", description = "Crea emparejamientos aleatorios para el torneo (solo ADMIN)")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/generate/{tournamentId}")
     public ResponseEntity<List<Match>> generateMatchups(@PathVariable UUID tournamentId) {
         return ResponseEntity.ok(matchService.generateMatchups(tournamentId));
     }
 
+    @Operation(summary = "Consultar partida por ID", description = "Devuelve los detalles de una partida (acceso público)")
     @GetMapping("/{id}")
     public ResponseEntity<Match> getMatchById(@PathVariable UUID id) {
         return ResponseEntity.ok(matchService.getMatchById(id));
+    }
+
+    @Operation(summary = "Enviar mensaje a la partida", description = "Publica un mensaje en el chat de la partida (PLAYER, ADMIN)")
+    @PreAuthorize("hasAnyRole('PLAYER', 'ADMIN')")
+    @PostMapping("/{id}/messages")
+    public ResponseEntity<Message> sendMatchMessage(@PathVariable UUID id, @RequestBody @Valid SendMessageRequest request) {
+        Message message = messageService.sendMessageToMatch(id, request.getContent());
+        return ResponseEntity.ok(message);
+    }
+
+    @Operation(summary = "Listar mensajes de la partida", description = "Obtiene los mensajes asociados a una partida (PLAYER, ADMIN)")
+    @PreAuthorize("hasAnyRole('PLAYER', 'ADMIN')")
+    @GetMapping("/{id}/messages")
+    public ResponseEntity<List<Message>> getMatchMessages(@PathVariable UUID id) {
+        return ResponseEntity.ok(messageService.getMessagesByMatch(id));
     }
 
 }

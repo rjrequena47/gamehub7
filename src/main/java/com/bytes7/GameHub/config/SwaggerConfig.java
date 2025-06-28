@@ -20,7 +20,7 @@ public class SwaggerConfig {
             .info(new Info()
                 .title("GameHub7 API")
                 .version("1.0")
-                .description("Plataforma de gestión de torneos, partidos y usuarios (Equipo 7)"))
+                .description("Documentación interactiva para plataforma de gestión de Torneos, Partidas, Mensajes y Ranking (Equipo 7)"))
             .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
             .components(new Components()
                 .addSecuritySchemes(securitySchemeName,
