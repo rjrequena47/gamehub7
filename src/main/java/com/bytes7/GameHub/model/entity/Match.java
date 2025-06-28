@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.util.UUID;
 
+import com.bytes7.GameHub.model.enums.MatchStatus;
+
 @Entity
 @Table(name = "matches")
 @Getter @Setter
@@ -27,6 +29,9 @@ public class Match {
     @ManyToOne
     @JoinColumn(name = "player2_id")
     private User player2;
+
+    @Enumerated(EnumType.STRING)
+    private MatchStatus status;
 
     @Enumerated(EnumType.STRING)
     private Result result;
