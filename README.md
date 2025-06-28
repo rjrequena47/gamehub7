@@ -9,7 +9,7 @@
 | Tecnología        | Versión              |
 |------------------|-----------------------|
 | Java             | 17                    |
-| Spring Boot      | 3.5.0 (última estable)|
+| Spring Boot      | 3.4.4                 |
 | Spring Security  | Integrado             |
 | JWT (JJWT)       | Integrado             |
 | PostgreSQL       | 15                    |
@@ -223,20 +223,20 @@ Para más detalles interactivos, consultar la documentación Swagger:
 
 ```
 gamehub-backend/
-├── src/
-│   └── main/
-│       ├── java/com/bytes7/GameHub/
-│       │   ├── config/
-│       │   ├── controller/
-│       │   ├── dto/
-│       │   ├── model/
-│       │   ├── repository/
-│       │   ├── security/
-│       │   ├── service/
-│       │   └── GameHubApplication.java
-│       └── resources/
-│           ├── application.properties
-│           └── static/
+├── src/main/java/com/bytes7/GameHub/
+│   ├── config/
+│   ├── controller/
+│   ├── dto/
+│   ├── exception/
+│   ├── model/
+│   ├── repository/
+│   ├── security/
+│   ├── service/
+│   └── GameHubApplication.java
+├── src/main/resources/
+│   ├── application.properties
+│   ├── application-docker.properties
+│   └── static/
 ├── Dockerfile
 ├── docker-compose.yml
 └── README.md
@@ -301,15 +301,17 @@ gamehub-backend/
 - [x] Seguridad basada en JWT y roles
 - [x] Documentación de API con Swagger
 - [x] Entorno reproducible vía Docker
+- [x] Emparejamiento automático entre jugadores
+- [x] Registro de resultados de partidos
+- [x] Chat básico (HTTP Polling)
+- [x] Sistema de ranking con puntos y estadísticas
+- [x] Swagger documentado y actualizado
+- [x] Despliegue automático con Docker
 
 ---
 
 ## 🛠️ Funcionalidades en Desarrollo
 
-- [ ] Emparejamiento automático entre jugadores
-- [ ] Registro de resultados de partidos
-- [ ] Chat básico (HTTP Polling)
-- [ ] Sistema de ranking con puntos y estadísticas
 - [ ] Pruebas unitarias con JUnit/Mockito
 - [ ] Control global de errores con `@ControllerAdvice`
 
