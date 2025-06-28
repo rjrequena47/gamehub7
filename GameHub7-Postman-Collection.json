@@ -1,0 +1,440 @@
+{
+	"info": {
+		"_postman_id": "cf84c884-09bd-4a3b-b8f0-7dc83cabbfc7",
+		"name": "GameHub7",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45943072"
+	},
+	"item": [
+		{
+			"name": "Registro y Autenticación",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"admin2\",\r\n  \"email\": \"admin2@test.com\",\r\n  \"password\": \"test123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/register",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login ADMIN",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"admin@test.com\", \"password\": \"test123\"}"
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login PLAYER",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"player1@test.com\", \"password\": \"test1234\"}"
+						},
+						"url": {
+							"raw": "{{host}}/api/auth/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Torneos",
+			"item": [
+				{
+					"name": "Crear Torneo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"Torneo de Prueba\",\"description\": \"Torneo automatizado\"}"
+						},
+						"url": {
+							"raw": "{{host}}/api/tournaments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"tournaments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unirse al Torneo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/tournaments/{{tournamentId}}/join",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"tournaments",
+								"{{tournamentId}}",
+								"join"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enviar Mensaje al Torneo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"content\": \"¡Vamos equipo!\"}"
+						},
+						"url": {
+							"raw": "{{host}}/api/tournaments/{{tournamentId}}/messages",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"tournaments",
+								"{{tournamentId}}",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Mensajes del Torneo",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/tournaments/{{tournamentId}}/messages",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"tournaments",
+								"{{tournamentId}}",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Emparejamientos",
+			"item": [
+				{
+					"name": "Generar Emparejamientos",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/matches/generate/{{tournamentId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"matches",
+								"generate",
+								"{{tournamentId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Partidas del Torneo",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/matches/tournament/{{tournamentId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"matches",
+								"tournament",
+								"{{tournamentId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Consulta y Actualización de Resultados",
+			"item": [
+				{
+					"name": "Consultar Partida",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/matches/{{matchId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"matches",
+								"{{matchId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Resultado de Partida",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"result\": \"PLAYER1_WON\"}"
+						},
+						"url": {
+							"raw": "{{host}}/api/matches/{{matchId}}/result",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"matches",
+								"{{matchId}}",
+								"result"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Enviar Mensaje a la Partida",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"content\": \"¡Buena partida!\"}"
+						},
+						"url": {
+							"raw": "{{host}}/api/matches/{{matchId}}/messages",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"matches",
+								"{{matchId}}",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Mensajes de la Partida",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/matches/{{matchId}}/messages",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"matches",
+								"{{matchId}}",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ranking",
+			"item": [
+				{
+					"name": "Consultar Ranking del Torneo",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/tournaments/{{tournamentId}}/ranking",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"tournaments",
+								"{{tournamentId}}",
+								"ranking"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

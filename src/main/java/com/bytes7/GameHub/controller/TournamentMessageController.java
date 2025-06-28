@@ -18,7 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/tournaments")
 @RequiredArgsConstructor
-@Tag(name = "Tournaments", description = "Gestión de torneos y mensajes")
+@Tag(name = "Torneos", description = "Gestión de torneos de GameHub7 (Mensajes)")
 public class TournamentMessageController {
 
     private final MessageService messageService;

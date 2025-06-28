@@ -8,7 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
-// Importa el filtro
 import com.bytes7.GameHub.security.JwtAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -30,17 +29,18 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                     "/api/auth/**",
-                    "/api/users/{id}",          // Perfil público
-                    "/api/tournaments",         // Listar torneos
-                    "/api/tournaments/{id}",    // Detalle de torneo
-                    "/api/matches/{id}",        // Consulta de Match por id
-                    "/v3/api-docs/**",          // Swagger JSON
+                    "/api/users/{id}",                  // Perfil público
+                    "/api/tournaments",                 // Listar torneos
+                    "/api/tournaments/{id}",            // Detalle de torneo
+                    "/api/tournaments/{id}/ranking",    // Ranking del torneo
+                    "/api/matches/{id}",                // Consulta de Match por id
+                    "/v3/api-docs/**",                  // Swagger JSON
                     "/swagger-ui/**",
                     "/swagger-ui.html"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // ⬅️ Aquí inyectamos el filtro
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

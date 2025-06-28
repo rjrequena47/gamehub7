@@ -44,8 +44,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
-                SecurityContextHolder.clearContext(); // Limpia contexto si falla
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401, no 403
+                SecurityContextHolder.clearContext();
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
         }

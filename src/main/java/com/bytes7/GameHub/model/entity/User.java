@@ -3,6 +3,7 @@ package com.bytes7.GameHub.model.entity;
 import com.bytes7.GameHub.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.util.UUID;
 
 @Entity
